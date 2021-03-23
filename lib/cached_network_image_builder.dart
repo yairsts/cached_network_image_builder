@@ -27,9 +27,7 @@ class CachedNetworkImageBuilder extends StatelessWidget {
     return FutureBuilder<String>(
       future: Future<String>.microtask(() async {
         RegExp ieRegEx = RegExp(
-          imageExtensions != null
-              ? imageExtensions.map((e) => "(.${e.replaceAll(RegExp('[. ]'), '')})").join("|")
-              : "(.jpg)|(.jpeg)|(.gif)|(.png)",
+          imageExtensions != null ? imageExtensions.map((e) => "(.${e.replaceAll(RegExp('[. ]'), '')})").join("|") : "(.jpg)|(.jpeg)|(.gif)|(.png)",
         );
 
         String imageName = url.split('/').last;
@@ -44,7 +42,7 @@ class CachedNetworkImageBuilder extends StatelessWidget {
         if (folderDirectory.listSync().toString().contains(imageDirectory.path)) {
           return imageDirectory.path;
         } else if (url.startsWith(RegExp("http(s)?://")) && url.contains(ieRegEx)) {
-          Response response = await get(url);
+          Response response = await get(Uri(path: url));
           if (response.statusCode == 200) {
             if (response.headers['content-type'].startsWith('image')) {
               File file = File(imageDirectory.path);
